@@ -115,7 +115,7 @@ class _FilesPageState extends State<FilesPage> {
       leading: backButton(),
       actionsPadding: EdgeInsets.only(right: 8),
       actions: [
-        SettingsPopup()
+        SettingsPopupButton()
       ],
     );
   }

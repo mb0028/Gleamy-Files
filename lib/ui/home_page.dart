@@ -36,15 +36,20 @@ class _HomePageState extends State<HomePage> {
                 physics: BouncingScrollPhysics(),
                 children: [
                   SizedBox(height: 100),
-                  Text(
-                    pageIndex == 0 ? "Gleamy Files" : "Favorites",
-                    textAlign: .center,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 30,
-                      fontWeight: .bold
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        pageIndex == 0 ? "Gleamy Files" : "Favorites",
+                        textAlign: .center,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 30,
+                          fontWeight: .bold
+                        ),
+                      ),
+                    ],
                   ),
+                  SizedBox(height: 50),
                   pageIndex == 0 ? _HomeMainDirs() : _HomeFavorites(),
                   SizedBox(height: 100),
                 ],
@@ -62,29 +67,25 @@ class _HomePageState extends State<HomePage> {
 class _HomeMainDirs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).colorScheme.surfaceContainer,
-      elevation: 0,
-      child: Column(
-        children: [
-          Column(
-            children: [
-              _Dir(path: Platform.isAndroid ? "/sdcard" : "C:/"),
-              _Dir(path: Platform.isAndroid ? " " : "D:/"),
-              _Dir(path: Platform.isAndroid ? "/sdcard/Download" : "E:/"),
-            ],
-          ),
-          Divider(height: 10),
-          Column(
-            children: [
-              _Dir(path: Platform.isAndroid ? "/sdcard/DCIM" : " "),
-              _Dir(path: Platform.isAndroid ? "/sdcard/Pictures" : " "),
-              _Dir(path: Platform.isAndroid ? "/sdcard/Movies" : " "),
-              _Dir(path: Platform.isAndroid ? "/sdcard/Music" : " "),
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        Column(
+          children: [
+            _Dir(path: Platform.isAndroid ? "/sdcard" : "C:/"),
+            _Dir(path: Platform.isAndroid ? " " : "D:/"),
+            _Dir(path: Platform.isAndroid ? "/sdcard/Download" : "E:/"),
+          ],
+        ),
+        Divider(height: 10),
+        Column(
+          children: [
+            _Dir(path: Platform.isAndroid ? "/sdcard/DCIM" : " "),
+            _Dir(path: Platform.isAndroid ? "/sdcard/Pictures" : " "),
+            _Dir(path: Platform.isAndroid ? "/sdcard/Movies" : " "),
+            _Dir(path: Platform.isAndroid ? "/sdcard/Music" : " "),
+          ],
+        ),
+      ],
     );
   }
 }

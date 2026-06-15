@@ -154,7 +154,7 @@ void _addToFavorits(String path, BuildContext context, Function onDialogPop) {
   Navigator.of(context).pop();
   if (appSettings.favoritePaths.contains(path)) {
     appSettings.favoritePaths.remove(path);
-    showToast("Remove from favorites:\n$path", context: context);
+    showToast("Removed from favorites:\n$path", context: context);
   } else {
     appSettings.favoritePaths.add(path);
     showToast("Added to favorites:\n$path", context: context);

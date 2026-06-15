@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gleamy_files/ui/Popups/settings_popup.dart';
 
 class HomePageNavigationRail extends StatefulWidget {
   const HomePageNavigationRail({super.key, required this.onchange});
@@ -31,6 +32,7 @@ class _HomePageNavigationRailState extends State<HomePageNavigationRail> {
           onchange(value);
         });
       },
+      leading: SettingsPopupButton(),
       destinations: [
         NavigationRailDestination(
           icon: Icon(Icons.snippet_folder_outlined),
