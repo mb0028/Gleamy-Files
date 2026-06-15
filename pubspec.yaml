@@ -11,9 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # cupertino_icons: ^1.0.8
   # system_theme: ^3.3.0
-  # android_path_provider: ^0.3.2
+
   open_filex: ^4.7.0
   path: ^1.9.1
   
@@ -27,6 +26,8 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^6.0.0
+
+
 
 flutter:
 

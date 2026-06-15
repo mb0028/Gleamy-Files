@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:gleamy_files/Scripts/settings.dart';
 import 'package:gleamy_files/ui/home_page.dart';
 
+Settings appSettings = Settings();
+
 void main() {
+  appSettings.loadSettings();
+
   runApp(const MyApp());
 }
 

@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:gleamy_files/main.dart';
+import 'package:gleamy_files/ui/Popups/files_more_action.dart';
 import 'package:gleamy_files/ui/Widgets/file_or_folder_card.dart';
 import 'package:gleamy_files/ui/Widgets/navigation_bars.dart';
 import 'package:gleamy_files/ui/Widgets/scaffold_padding.dart';
 import 'package:gleamy_files/ui/files_page.dart';
+import 'package:open_filex/open_filex.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,45 +16,37 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int pageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
         children: [
-          HomePageNavigationRail(),
+          HomePageNavigationRail(
+            onchange: (value) {
+              setState(() {
+                pageIndex = value;
+              });
+            },
+          ),
           Expanded(
             child: ScaffoldPadding(
-              child: HomePageNavigationRail.selected == 0 ? ListView(
+              child: ListView(
                 physics: BouncingScrollPhysics(),
                 children: [
-                  SizedBox(height: 100,),
+                  SizedBox(height: 100),
                   Text(
-                    "Gleamy Files",
+                    pageIndex == 0 ? "Gleamy Files" : "Favorites",
                     textAlign: .center,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
-                      fontSize: 32,
+                      fontSize: 30,
                       fontWeight: .bold
                     ),
                   ),
-                  _HomeMainDirs(),
-                  SizedBox(height: 100,),
-                ],
-              ) : ListView(
-                physics: BouncingScrollPhysics(),
-                children: [
-                  SizedBox(height: 100,),
-                  Text(
-                    "Favorites",
-                    textAlign: .center,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 32,
-                      fontWeight: .bold
-                    ),
-                  ),
-                  _HomeFavorites(),
-                  SizedBox(height: 100,),
+                  pageIndex == 0 ? _HomeMainDirs() : _HomeFavorites(),
+                  SizedBox(height: 100),
                 ],
               ),
             ),
@@ -61,6 +56,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+//////////////////////////////////
 
 class _HomeMainDirs extends StatelessWidget {
   @override
@@ -92,17 +89,35 @@ class _HomeMainDirs extends StatelessWidget {
   }
 }
 
-class _HomeFavorites extends StatelessWidget {
+
+class _HomeFavorites extends StatefulWidget {
 
   @override
+  State<_HomeFavorites> createState() => _HomeFavoritesState();
+}
+
+class _HomeFavoritesState extends State<_HomeFavorites> {
+  @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return SizedBox(
+      height: 500,
+      child: ListView.builder(
+        itemCount: appSettings.favoritePaths.length,
+        itemBuilder: (context, index) => _Dir(
+          path: appSettings.favoritePaths[index],
+          onDialogPop: () => setState(() {}),
+        ),
+      ),
+    );
   }
 }
 
+///////////////////////////////////
+
 class _Dir extends StatelessWidget {
   final String path;
-  const _Dir({ required this.path });
+  final Function? onDialogPop;
+  const _Dir({ required this.path, this.onDialogPop});
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +125,10 @@ class _Dir extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 5.0),
       child: FileOrFolderCardWidget(
         filePath: path,
-        onClick: (path) => _openDir(path, context),
+        onClick: (path) => FileSystemEntity.isDirectorySync(path)
+          ? _openDir(path, context)
+          : OpenFilex.open(path),
+          onLongPress: (path) => showFileOrFolderMoreActionDialog(path, context, () => onDialogPop!(),),
         onFocusChange: (isFocused, path) {},
       ),
     );

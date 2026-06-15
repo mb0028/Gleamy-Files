@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 
 class HomePageNavigationRail extends StatefulWidget {
-  const HomePageNavigationRail({super.key});
-
-  static int selected = 0;
+  const HomePageNavigationRail({super.key, required this.onchange});
+  final Function(dynamic pageIndex) onchange;
 
   @override
-  State<HomePageNavigationRail> createState() => _HomePageNavigationRailState();
+  State<HomePageNavigationRail> createState() => _HomePageNavigationRailState(onchange: onchange);
 }
 
 class _HomePageNavigationRailState extends State<HomePageNavigationRail> {
-  
+  int selectedPage = 0;
+  final Function(dynamic pageIndex) onchange;
+
+  _HomePageNavigationRailState({required this.onchange});
+
   @override
   Widget build(BuildContext context) {
     bool expanded = MediaQuery.sizeOf(context).width > 700; 
     return NavigationRail(
-      selectedIndex: HomePageNavigationRail.selected,
+      selectedIndex: selectedPage,
       extended: expanded,
       labelType: expanded ? .none : .all,
       selectedLabelTextStyle: TextStyle(
@@ -24,7 +27,8 @@ class _HomePageNavigationRailState extends State<HomePageNavigationRail> {
       ),
       onDestinationSelected: (value) {
         setState(() {
-          HomePageNavigationRail.selected = value;
+          selectedPage = value;
+          onchange(value);
         });
       },
       destinations: [

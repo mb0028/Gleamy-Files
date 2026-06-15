@@ -1,17 +1,17 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gleamy_files/Scripts/file_helper.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart' as Path;
 
 class FileOrFolderCardWidget extends StatelessWidget {
   final String filePath;
   final Function(String path) onClick;
+  final Function(String path) onLongPress;
   final Function(bool isFocused, String path) onFocusChange;
   const FileOrFolderCardWidget({
-    super.key,
-    required this.filePath,
-    required this.onClick,
-    required this.onFocusChange
+    super.key, required this.filePath, required this.onClick,
+    required this.onFocusChange, required this.onLongPress
    });
 
   @override
@@ -23,6 +23,7 @@ class FileOrFolderCardWidget extends StatelessWidget {
         var m = stat.modified;
         return _FileFolderCard(
           onClick: onClick,
+          onLongPress: onLongPress,
           onFucusChange: onFocusChange,
           filePath: filePath,
           color: Theme.of(context).colorScheme.primaryContainer,
@@ -35,7 +36,8 @@ class FileOrFolderCardWidget extends StatelessWidget {
         var stat = File(filePath).statSync();
         var m = stat.modified;
         return _FileFolderCard(
-          onClick: onClick,
+          onClick: (path) => OpenFilex.open(path),
+          onLongPress: onLongPress,
           onFucusChange: onFocusChange,
           filePath: filePath,
           color: Theme.of(context).colorScheme.secondaryContainer,
@@ -67,6 +69,7 @@ int _fileSize(int size) {
 
 class _FileFolderCard extends StatelessWidget {
   final Function(String path) onClick;
+  final Function(String path) onLongPress;
   final Function(bool isFocused, String path) onFucusChange;
   final String filePath;
   final Color color;
@@ -75,8 +78,8 @@ class _FileFolderCard extends StatelessWidget {
   final String displayName;
 
   const _FileFolderCard({
-    required this.onClick, required this.filePath, required this.color,
-    required this.icon, required this.subtitle, required this.displayName, required this.onFucusChange
+    required this.onClick, required this.filePath, required this.color, required this.icon,
+    required this.subtitle, required this.displayName, required this.onFucusChange, required this.onLongPress
   });
 
   @override
@@ -92,6 +95,7 @@ class _FileFolderCard extends StatelessWidget {
             borderRadius: BorderRadiusGeometry.circular(15)
           ),
           onTap: () => onClick(filePath),
+          onLongPress: () => onLongPress(filePath),
           leading: Icon(
             icon,
             size: 36,

@@ -24,7 +24,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "mb28.gleamyFiles"
+        applicationId = "mb28.GleamyFiles"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 25

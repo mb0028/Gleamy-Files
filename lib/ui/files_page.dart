@@ -1,10 +1,8 @@
-
 import 'dart:io';
 import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
-import 'package:gleamy_files/Scripts/file_helper.dart';
+import 'package:gleamy_files/ui/Popups/files_more_action.dart';
 import 'package:gleamy_files/ui/Widgets/file_details_panel.dart';
-import 'package:gleamy_files/ui/Widgets/outl_btn_with_padding.dart';
 import 'package:gleamy_files/ui/Widgets/file_or_folder_card.dart';
 import 'package:gleamy_files/ui/Widgets/scaffold_padding.dart';
 import 'package:gleamy_files/ui/Popups/settings_popup.dart';
@@ -29,17 +27,17 @@ class _FilesPageState extends State<FilesPage> {
   void updatePaths(String path) {
     var dir = Directory.fromUri(Uri.file(path));
     Future.delayed(Duration.zero, () {
-      setState(() => currentFiles = dir.listSync().toList());
+      var list = dir.listSync().toList();
+      // list.sort((a, b) {
+      //   return Path.basename(a.path).length.compareTo(Path.basename(b.path).length);
+      // }); TODO
+      setState(() => currentFiles = list);
     });
   }
 
   void openFileOrFolder(String path) {
     if (FileSystemEntity.isFileSync(path)) {
-      showDialog(context: context, builder:(context) {
-        return Dialog(
-          child: fileClickedPopup(path) 
-        );
-      });
+      OpenFilex.open(path);
     } else {
       updatePaths(path);
       perviousPaths.add(path);
@@ -90,6 +88,9 @@ class _FilesPageState extends State<FilesPage> {
               itemBuilder: (context, i) => FileOrFolderCardWidget(
                 filePath: currentFiles[i].path,
                 onClick: (s) => openFileOrFolder(s),
+                onLongPress: (s) => showFileOrFolderMoreActionDialog(s, context, () {
+                  updatePaths(perviousPaths.last);
+                }),
                 onFocusChange: _onFileFocusChanges,
               ),
             ),
@@ -124,68 +125,6 @@ class _FilesPageState extends State<FilesPage> {
       tooltip: "Back",
       onPressed: () => backAction(),
       icon: Icon(Icons.arrow_back),
-    );
-  }
-
-  Widget fileClickedPopup(String path) {
-    return Container(
-      width: 500,
-      padding: .all(15),
-      height: 260,
-      child: ListView(
-        physics: BouncingScrollPhysics(),
-        children: [
-          OutlineBtnWithPadding(
-            text: "Open",
-            onClick: () async {
-              Navigator.of(context).pop();
-              await OpenFilex.open(path);
-            },
-          ),
-          OutlineBtnWithPadding(
-            text: "Rename",
-            onClick: () async {
-              Navigator.of(context).pop();
-              await renameFileDialog(context, path);
-              updatePaths(perviousPaths.last);
-            }
-          ),
-          OutlineBtnWithPadding(
-            text: "Delete",
-            onClick: () async {
-              Navigator.of(context).pop();
-              await deleteFileDialoge(context, path);
-              updatePaths(perviousPaths.last);
-            },
-          ),
-          Row(
-            spacing: 6,
-            children: [
-              Expanded(
-                child: OutlineBtnWithPadding(
-                  text: "Copy",
-                  onClick: () async {
-                    Navigator.of(context).pop();
-                    await copyOrMoveDialoge(context, path, false);
-                    updatePaths(perviousPaths.last);
-                  },
-                ),
-              ),
-              Expanded(
-                child: OutlineBtnWithPadding(
-                  text: "Move",
-                  onClick: () async {
-                    Navigator.of(context).pop();
-                    await copyOrMoveDialoge(context, path, true);
-                    updatePaths(perviousPaths.last);
-                  },
-                ),
-              ),
-            ],
-          ),
-          
-        ],
-      ),
     );
   }
 
