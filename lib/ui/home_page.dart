@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:gleamy_files/ui/Widgets/file_or_folder.dart';
+import 'package:gleamy_files/ui/Widgets/file_or_folder_card.dart';
 import 'package:gleamy_files/ui/Widgets/navigation_bars.dart';
 import 'package:gleamy_files/ui/Widgets/scaffold_padding.dart';
 import 'package:gleamy_files/ui/files_page.dart';
@@ -108,9 +108,10 @@ class _Dir extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5.0),
-      child: FileOrFolderWidget(
-        onClickPath: path,
+      child: FileOrFolderCardWidget(
+        filePath: path,
         onClick: (path) => _openDir(path, context),
+        onFocusChange: (isFocused, path) {},
       ),
     );
   }

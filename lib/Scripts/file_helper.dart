@@ -24,6 +24,7 @@ IconData getIconByExtention(String exten){
     case ".docx" || ".pptx" || ".xls" || ".sdocx": return Icons.my_library_books_outlined;
     case ".xml" || ".xaml" || ".csproj" || ".slnx": return Icons.extension_rounded;
     case ".gif": return Icons.gif_outlined;
+    case "": return Icons.folder_outlined;
   }
   return Icons.insert_drive_file_outlined;
 }

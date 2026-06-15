@@ -8,21 +8,31 @@ class FileDetailsPanel extends StatelessWidget {
   final String path;
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.sizeOf(context).width > 700) {
+    var screenWidth = MediaQuery.sizeOf(context).width;
+    if (screenWidth> 700) {
       bool isFile = FileSystemEntity.isFileSync(path);
-      String fileInfo = "";
-      String folderInfo = "";
+      String size = ""; String modified = ""; String accessed = "";
+
       if (isFile && path.isNotEmpty) {
         var stat = File(path).statSync();
-        fileInfo = "Size: ${stat.size} Bytes\nModified: ${stat.modified}\nAccessed: ${stat.accessed}";
-      } else if (FileSystemEntity.isDirectorySync(path) && path.isNotEmpty) {
+        var m = stat.modified;
+        var a = stat.accessed;
+        size = "Size: ${stat.size} Bytes";
+        modified = "Modified: ${m.day}/${m.month}/${m.year}";
+        accessed = "Accessed: ${a.day}/${a.month}/${a.year}";
+      }
+      else if (FileSystemEntity.isDirectorySync(path) && path.isNotEmpty) {
         var stat = Directory(path).statSync();
-        folderInfo = "Size: ${stat.size} Bytes\nModified: ${stat.modified}\nAccessed: ${stat.accessed}";
+        var m = stat.modified;
+        var a = stat.accessed;
+        size = "Size: ${stat.size} Bytes";
+        modified = "Modified: ${m.day}/${m.month}/${m.year}";
+        accessed = "Accessed: ${a.day}/${a.month}/${a.year}";
       }
 
       return SelectionArea(
         child: Container(
-          width: 300,
+          width: 240 + (screenWidth / 10),
           padding: .all(15),
           decoration: BoxDecoration(
             borderRadius: .only(topRight: .circular(25), bottomRight: .circular(25)),
@@ -30,6 +40,7 @@ class FileDetailsPanel extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: .start,
+            spacing: 8,
             children: [
               Container(
                 width: 270,
@@ -44,9 +55,28 @@ class FileDetailsPanel extends StatelessWidget {
                   color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
-              
+              Row(
+                spacing: 10,
+                children: [
+                  Icon(Icons.scale_rounded, size: 38,),
+                  Text(size),
+                ],
+              ),
+              Row(
+                spacing: 10,
+                children: [
+                  Icon(Icons.edit_calendar_outlined, size: 38,),
+                  Text(modified),
+                ],
+              ),
+              Row(
+                spacing: 10,
+                children: [
+                  Icon(Icons.open_in_new_rounded, size: 38,),
+                  Text(accessed),
+                ],
+              ),
               Text(path),
-              Text(isFile ? fileInfo : folderInfo),
             ],
           ),
         ),

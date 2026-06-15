@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gleamy_files/Scripts/file_helper.dart';
 import 'package:gleamy_files/ui/Widgets/file_details_panel.dart';
 import 'package:gleamy_files/ui/Widgets/outl_btn_with_padding.dart';
-import 'package:gleamy_files/ui/Widgets/file_or_folder.dart';
+import 'package:gleamy_files/ui/Widgets/file_or_folder_card.dart';
 import 'package:gleamy_files/ui/Widgets/scaffold_padding.dart';
 import 'package:gleamy_files/ui/Popups/settings_popup.dart';
 import 'package:open_filex/open_filex.dart';
@@ -69,29 +69,33 @@ class _FilesPageState extends State<FilesPage> {
           mainAxisSize: .min,
           children: [
             FileDetailsPanel(path: selectedPath),
-            Expanded(
-              child: ScaffoldPadding(
-                child: Stack(
-                  alignment: AlignmentGeometry.topCenter,
-                  children: [
-                    ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      padding: .only(bottom: 350, top: 50),
-                      itemCount: currentFiles.length,
-                      itemBuilder: (context, i) => FileOrFolderWidget(
-                        onClickPath: currentFiles[i].path,
-                        onClick: (s) => openFileOrFolder(s),
-                      ),
-                    ),
-                    _CurrentPathHeader(perviousPaths: perviousPaths),
-                  ],
-                ),
-              ),
-            ),
+            filesView(),
           ],
         ),
-      
         floatingActionButton: _FileFloatingBtn(),
+      ),
+    );
+  }
+
+  Widget filesView() {
+    return Expanded(
+      child: ScaffoldPadding(
+        child: Stack(
+          alignment: AlignmentGeometry.topCenter,
+          children: [
+            ListView.builder(
+              physics: BouncingScrollPhysics(),
+              padding: .only(bottom: 350, top: 50),
+              itemCount: currentFiles.length,
+              itemBuilder: (context, i) => FileOrFolderCardWidget(
+                filePath: currentFiles[i].path,
+                onClick: (s) => openFileOrFolder(s),
+                onFocusChange: _onFileFocusChanges,
+              ),
+            ),
+            _CurrentPathHeader(perviousPaths: perviousPaths),
+          ],
+        ),
       ),
     );
   }
@@ -99,7 +103,7 @@ class _FilesPageState extends State<FilesPage> {
   AppBar filesPageAppBar(BuildContext context) {
     return AppBar(
       surfaceTintColor: Theme.of(context).colorScheme.tertiaryContainer,
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       title: Text(
         widget.title,
         style: TextStyle(
@@ -192,6 +196,14 @@ class _FilesPageState extends State<FilesPage> {
       return;
     }
     updatePaths(perviousPaths.last);
+  }
+
+  void _onFileFocusChanges(bool value, String path) {
+    if (value) {
+      setState(() {
+        selectedPath = path;
+      });
+    }
   }
 
 }
