@@ -36,18 +36,14 @@ class _HomePageState extends State<HomePage> {
                 physics: BouncingScrollPhysics(),
                 children: [
                   SizedBox(height: 100),
-                  Row(
-                    children: [
-                      Text(
-                        pageIndex == 0 ? "Gleamy Files" : "Favorites",
-                        textAlign: .center,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 30,
-                          fontWeight: .bold
-                        ),
-                      ),
-                    ],
+                  Text(
+                    pageIndex == 0 ? "Gleamy Files" : "Favorites",
+                    textAlign: .center,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 30,
+                      fontWeight: .bold
+                    ),
                   ),
                   SizedBox(height: 50),
                   pageIndex == 0 ? _HomeMainDirs() : _HomeFavorites(),
@@ -100,6 +96,9 @@ class _HomeFavorites extends StatefulWidget {
 class _HomeFavoritesState extends State<_HomeFavorites> {
   @override
   Widget build(BuildContext context) {
+    appSettings.favoritePaths.sort((a, b) {
+      return FileSystemEntity.isDirectorySync(a) ? 0 : 1;
+    }); //TODO: More sorting methods
     return SizedBox(
       height: 500,
       child: ListView.builder(
@@ -129,7 +128,10 @@ class _Dir extends StatelessWidget {
         onClick: (path) => FileSystemEntity.isDirectorySync(path)
           ? _openDir(path, context)
           : OpenFilex.open(path),
-          onLongPress: (path) => showFileOrFolderMoreActionDialog(path, context, () => onDialogPop!(),),
+          onLongPress: (path) => showFileOrFolderMoreActionDialog(path, context, () {
+            if (onDialogPop != null) { onDialogPop!(); }
+          },
+        ),
         onFocusChange: (isFocused, path) {},
       ),
     );

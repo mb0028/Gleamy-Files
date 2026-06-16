@@ -8,22 +8,23 @@ IconData getIconByExtention(String exten){
     case ".png" || ".jpg" || ".jpeg" || ".webp": return Icons.photo_outlined;
     case ".mp4" || ".mkv": return Icons.video_file_outlined;
     case ".mp3" || ".m4a" || ".flac" || ".wav" || ".ogg" || ".aac": return Icons.music_note_outlined;
+    case ".gif": return Icons.gif_outlined;
     case ".txt": return Icons.text_snippet_outlined;
     case ".lrc" || ".srt": return Icons.subtitles_outlined;
+    case ".md": return Icons.style_rounded;
     case ".py" || ".cs" || ".dart" || ".c" || ".h" || ".cpp" || ".java" || ".kt": return Icons.code;
-    case ".md": return Icons.arrow_circle_down_rounded;
     case ".js": return Icons.javascript_rounded;
     case ".json": return Icons.data_object_rounded;
     case ".zip" || ".rar" || ".7z" || ".tar" || ".tar.gz": return Icons.folder_zip_outlined;
-    case ".html" || ".html" || ".mhtml": return Icons.html_rounded;
+    case ".html" || ".htm" || ".mhtml" || ".url": return Icons.language_rounded;
     case ".css": return Icons.palette_outlined;
     case ".lnk": return Icons.link;
     case ".exe": return Icons.window_rounded;
     case ".dll": return Icons.dynamic_form;
     case ".pdf": return Icons.menu_book_rounded;
-    case ".docx" || ".pptx" || ".xls" || ".sdocx": return Icons.my_library_books_outlined;
+    case ".docx" || ".pptx" || ".xls" || ".sdocx": return Icons.sticky_note_2_outlined;
     case ".xml" || ".xaml" || ".csproj" || ".slnx": return Icons.extension_rounded;
-    case ".gif": return Icons.gif_outlined;
+    case ".ust" || ".ustx" || ".vsqx" || ".svp" || ".midi" || ".mid" || ".flp" || ".flm": return Icons.piano_rounded;
     case "": return Icons.folder_outlined;
   }
   return Icons.insert_drive_file_outlined;

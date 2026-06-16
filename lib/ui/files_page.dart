@@ -28,9 +28,9 @@ class _FilesPageState extends State<FilesPage> {
     var dir = Directory.fromUri(Uri.file(path));
     Future.delayed(Duration.zero, () {
       var list = dir.listSync().toList();
-      // list.sort((a, b) {
-      //   return Path.basename(a.path).length.compareTo(Path.basename(b.path).length);
-      // }); TODO
+      list.sort((a, b) {
+        return FileSystemEntity.isDirectorySync(a.path) ? 0 : 1;
+      }); //TODO: More sorting methods
       setState(() => currentFiles = list);
     });
   }
