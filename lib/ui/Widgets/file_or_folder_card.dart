@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:gleamy_files/Scripts/file_helper.dart';
+import 'package:gleamy_files/Structs/mb_file_sys_entity.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart' as Path;
 
@@ -41,7 +41,7 @@ class FileOrFolderCardWidget extends StatelessWidget {
           onFucusChange: onFocusChange,
           filePath: filePath,
           color: Theme.of(context).colorScheme.secondaryContainer,
-          icon: getIconByExtention(Path.extension(filePath)),
+          icon: MBFileSysEntity(filePath).icon,
           displayName: Path.basenameWithoutExtension(filePath),
           subtitle: "${_fileSize(stat.size)} MB  •  ${m.day}/${m.month}/${m.year}  •  ${Path.extension(filePath).substring(1)}$isHiddenFile",
         );

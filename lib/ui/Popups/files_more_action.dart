@@ -2,10 +2,10 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:gleamy_files/ui/Popups/toast.dart';
 import 'package:gleamy_files/ui/Widgets/outl_btn_with_padding.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:gleamy_files/Scripts/file_helper.dart';
+import 'package:gleamy_files/ui/Popups/file_page_helper_dialogs.dart';
 import 'package:gleamy_files/main.dart';
 
 void showFileOrFolderMoreActionDialog(String path, BuildContext context, Function onDialogPop) {
@@ -103,14 +103,14 @@ Dialog _ShowFolderDialog(String path, BuildContext context, Function onDialogPop
           //     onDialogPop();
           //   }
           // ), TODO
-          // OutlineBtnWithPadding(
-          //   text: "Delete",
-          //   onClick: () async {
-          //     Navigator.of(context).pop();
-          //     await deleteFileDialoge(context, path);
-          //     onDialogPop();
-          //   },
-          // ), TODO
+          OutlineBtnWithPadding(
+            text: "Delete",
+            onClick: () async {
+              Navigator.of(context).pop();
+              await deleteFileDialoge(context, path, isFolder: true);
+              onDialogPop();
+            },
+          ),
           OutlineBtnWithPadding(
             text: _addToFavoritsText(path),
             onClick: () => _addToFavorits(path, context, onDialogPop),
@@ -154,10 +154,10 @@ void _addToFavorits(String path, BuildContext context, Function onDialogPop) {
   Navigator.of(context).pop();
   if (appSettings.favoritePaths.contains(path)) {
     appSettings.favoritePaths.remove(path);
-    showToast("Removed from favorites:\n$path", context: context);
+    showStyledToast("Removed from favorites:\n$path", context);
   } else {
     appSettings.favoritePaths.add(path);
-    showToast("Added to favorites:\n$path", context: context);
+    showStyledToast("Added to favorites:\n$path", context);
   }
   appSettings.saveSettings();
   onDialogPop();

@@ -1,34 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:gleamy_files/ui/Popups/toast.dart';
 import 'package:path/path.dart' as Path;
-
-IconData getIconByExtention(String exten){
-  switch (exten) {
-    case ".png" || ".jpg" || ".jpeg" || ".webp": return Icons.photo_outlined;
-    case ".mp4" || ".mkv": return Icons.video_file_outlined;
-    case ".mp3" || ".m4a" || ".flac" || ".wav" || ".ogg" || ".aac": return Icons.music_note_outlined;
-    case ".gif": return Icons.gif_outlined;
-    case ".txt": return Icons.text_snippet_outlined;
-    case ".lrc" || ".srt": return Icons.subtitles_outlined;
-    case ".md": return Icons.style_rounded;
-    case ".py" || ".cs" || ".dart" || ".c" || ".h" || ".cpp" || ".java" || ".kt": return Icons.code;
-    case ".js": return Icons.javascript_rounded;
-    case ".json": return Icons.data_object_rounded;
-    case ".zip" || ".rar" || ".7z" || ".tar" || ".tar.gz": return Icons.folder_zip_outlined;
-    case ".html" || ".htm" || ".mhtml" || ".url": return Icons.language_rounded;
-    case ".css": return Icons.palette_outlined;
-    case ".lnk": return Icons.link;
-    case ".exe": return Icons.window_rounded;
-    case ".dll": return Icons.dynamic_form;
-    case ".pdf": return Icons.menu_book_rounded;
-    case ".docx" || ".pptx" || ".xls" || ".sdocx": return Icons.sticky_note_2_outlined;
-    case ".xml" || ".xaml" || ".csproj" || ".slnx": return Icons.extension_rounded;
-    case ".ust" || ".ustx" || ".vsqx" || ".svp" || ".midi" || ".mid" || ".flp" || ".flm": return Icons.piano_rounded;
-    case "": return Icons.folder_outlined;
-  }
-  return Icons.insert_drive_file_outlined;
-}
 
 Future renameFileDialog(BuildContext context, String path) async {
   var file = File(path);
@@ -62,9 +35,9 @@ Future renameFileDialog(BuildContext context, String path) async {
                   try {
                     Navigator.of(context).pop();
                     await file.rename("${Path.dirname(path)}${Platform.pathSeparator}${ctrlr.text}");
-                    showToast("Renamed ${Path.basename(path)} to ${ctrlr.text}", context: context);
+                    showStyledToast("Renamed ${Path.basename(path)} to ${ctrlr.text}", context);
                   } on Exception catch (e) {
-                    showToast("Failed to rename file. Error:\n$e", context: context);
+                    showStyledToast("Failed to rename file. Error:\n$e", context);
                   }
                 },
                 label: Text("Rename")
@@ -84,8 +57,8 @@ Future renameFileDialog(BuildContext context, String path) async {
   ));
 }
 
-Future deleteFileDialoge(BuildContext context, String path) async {
-  var file = File(path);
+Future deleteFileDialoge(BuildContext context, String path, { bool isFolder = false }) async {
+  var file = isFolder ? Directory(path) : File(path);
   await showDialog(context: context, builder: (context) => Dialog(
     child: Container(
       height: 140,
@@ -108,10 +81,10 @@ Future deleteFileDialoge(BuildContext context, String path) async {
                 onPressed: () async {
                   Navigator.of(context).pop();
                   try {
-                    await file.delete();
-                    showToast("Deleted ${Path.basename(path)}", context: context);
+                    await file.delete(recursive: true);
+                    showStyledToast("Deleted ${Path.basename(path)}", context);
                   } on Exception catch (e) {
-                    showToast("Failed to delete file. Error:\n$e", context: context);
+                    showStyledToast("Failed to delete file. Error:\n$e", context);
                   }
                 },
                 label: Text("Delete")
@@ -162,14 +135,14 @@ Future copyOrMoveDialoge(BuildContext context, String path, bool move) async {
               try {
                 if (move) {
                   await file.rename(ctrlr.text);
-                  showToast("Moved to ${ctrlr.text}", context: context);
+                  showStyledToast("Moved to ${ctrlr.text}", context);
                 } else {
                   await file.copy(ctrlr.text);
-                  showToast("Copied to ${ctrlr.text}", context: context);
+                  showStyledToast("Copied to ${ctrlr.text}", context);
                 }
               } on Exception catch (e) {
                 String copyOrMove = move ? "Move" : "Copy";
-                showToast("Failed to $copyOrMove file. Error:\n$e", context: context);
+                showStyledToast("Failed to $copyOrMove file. Error:\n$e", context);
               }
             },
             label: Text(move ? "move" : "copy")

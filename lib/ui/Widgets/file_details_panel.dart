@@ -1,34 +1,30 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:gleamy_files/Scripts/file_helper.dart';
-import 'package:path/path.dart' as Path;
+import 'package:gleamy_files/Structs/mb_file_sys_entity.dart';
 
 class FileDetailsPanel extends StatelessWidget {
-  const FileDetailsPanel({super.key, required this.path});
-  final String path;
+  const FileDetailsPanel({super.key, required this.mbFSE});
+  final MBFileSysEntity mbFSE;
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.sizeOf(context).width;
-    if (screenWidth> 700) {
-      bool isFile = FileSystemEntity.isFileSync(path);
+    if (screenWidth > 700) {
+      // bool isFile = fileFolder.isFile;
       String size = ""; String modified = ""; String accessed = "";
 
-      if (isFile && path.isNotEmpty) {
-        var stat = File(path).statSync();
-        var m = stat.modified;
-        var a = stat.accessed;
-        size = "Size: ${stat.size} Bytes";
+      // if (isFile && fileFolder.path.isNotEmpty) {
+        var m = mbFSE.dateModified;
+        var a = mbFSE.dateAccessed;
+        size = "Size: ${mbFSE.sizeBytes} Bytes";
         modified = "Modified: ${m.day}/${m.month}/${m.year}";
         accessed = "Accessed: ${a.day}/${a.month}/${a.year}";
-      }
-      else if (FileSystemEntity.isDirectorySync(path) && path.isNotEmpty) {
-        var stat = Directory(path).statSync();
-        var m = stat.modified;
-        var a = stat.accessed;
-        size = "Size: ${stat.size} Bytes";
-        modified = "Modified: ${m.day}/${m.month}/${m.year}";
-        accessed = "Accessed: ${a.day}/${a.month}/${a.year}";
-      }
+      // }
+      // else if (!isFile && fileFolder.path.isNotEmpty) {
+      //   var m = fileFolder.dateModified;
+      //   var a = fileFolder.dateAccessed;
+      //   size = "Size: ${fileFolder.sizeBytes} Bytes";
+      //   modified = "Modified: ${m.day}/${m.month}/${m.year}";
+      //   accessed = "Accessed: ${a.day}/${a.month}/${a.year}";
+      // }
 
       return SelectionArea(
         child: Container(
@@ -50,7 +46,7 @@ class FileDetailsPanel extends StatelessWidget {
                   borderRadius: .circular(15)
                 ),
                 child: Icon(
-                  getIconByExtention(Path.extension(path)),
+                  mbFSE.icon,
                   size: 160,
                   color: Theme.of(context).colorScheme.secondary,
                 ),
@@ -76,7 +72,7 @@ class FileDetailsPanel extends StatelessWidget {
                   Text(accessed),
                 ],
               ),
-              Text(path),
+              Text(mbFSE.path),
             ],
           ),
         ),

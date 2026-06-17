@@ -41,9 +41,8 @@ class Settings {
 
   void saveSettings() {
     String result = "";
-    for (var i = 0; i < favoritePaths.length; i++) {
+    for (var i = 0; i < favoritePaths.length; i++)
       result += _favoritePathsID + favoritePaths[i] + _nl;
-    }
     result += _favoriteSortingID + favoriteSorting.toString() + _nl;
 
     settingsFile.writeAsStringSync(result);

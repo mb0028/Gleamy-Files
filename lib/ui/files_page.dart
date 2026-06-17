@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
+import 'package:gleamy_files/Structs/mb_file_sys_entity.dart';
+import 'package:gleamy_files/ui/Popups/file_page_new_popup.dart';
 import 'package:gleamy_files/ui/Popups/files_more_action.dart';
 import 'package:gleamy_files/ui/Widgets/file_details_panel.dart';
 import 'package:gleamy_files/ui/Widgets/file_or_folder_card.dart';
@@ -19,7 +21,7 @@ class FilesPage extends StatefulWidget {
 
 class _FilesPageState extends State<FilesPage> {  
   final String startPath;
-  List<FileSystemEntity> currentFiles = [];
+  List<MBFileSysEntity> currentFiles = [];
   List<String> perviousPaths = [];
   String selectedPath = "";
   _FilesPageState({required this.startPath});
@@ -27,11 +29,29 @@ class _FilesPageState extends State<FilesPage> {
   void updatePaths(String path) {
     var dir = Directory.fromUri(Uri.file(path));
     Future.delayed(Duration.zero, () {
-      var list = dir.listSync().toList();
-      list.sort((a, b) {
-        return FileSystemEntity.isDirectorySync(a.path) ? 0 : 1;
-      }); //TODO: More sorting methods
-      setState(() => currentFiles = list);
+      List<String> dirs = [];
+      List<String> files = [];
+      List<MBFileSysEntity> result = [];
+
+      // Sort pass 0 : init lists
+      for (var element in dir.listSync()) {
+        if (FileSystemEntity.isDirectorySync(element.path))
+          dirs.add(element.path);
+        else
+          files.add(element.path);
+      }
+
+      // Sort pass 1 : by name      TODO: More sorting methods
+      dirs.sort();
+      files.sort();
+
+      // Sort pass 2 : folders first
+      for (var item in dirs)
+        result.add(MBFileSysEntity(item));
+      for (var item in files)
+        result.add(MBFileSysEntity(item));
+
+      setState(() => currentFiles = result);
     });
   }
 
@@ -66,11 +86,11 @@ class _FilesPageState extends State<FilesPage> {
         body: Row(
           mainAxisSize: .min,
           children: [
-            FileDetailsPanel(path: selectedPath),
+            FileDetailsPanel(mbFSE: MBFileSysEntity(selectedPath)),
             filesView(),
           ],
         ),
-        floatingActionButton: _FileFloatingBtn(),
+        floatingActionButton: _fileFloatingBtn(context, perviousPaths.last),
       ),
     );
   }
@@ -145,6 +165,22 @@ class _FilesPageState extends State<FilesPage> {
     }
   }
 
+  Widget _fileFloatingBtn(BuildContext context, String lastPath) {
+    return FloatingActionButton(
+      backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
+      foregroundColor: Theme.of(context).colorScheme.onTertiaryContainer,
+      onPressed: () { 
+        showFilesPageNewDialog(lastPath, context, () {
+          setState(() {
+            updatePaths(perviousPaths.last);
+          });
+        },);
+      },
+      tooltip: 'New...',
+      child: const Icon(Icons.add),
+    );
+  }
+
 }
 
 class _CurrentPathHeader extends StatelessWidget {
@@ -159,43 +195,39 @@ class _CurrentPathHeader extends StatelessWidget {
     return Container(
       margin: .only(top: 5.5),
       child: Container(
-        padding: .all(10),
+        height: 90,
+        padding: .all(5),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.tertiaryContainer.withAlpha(80),
+          color: Theme.of(context).colorScheme.tertiaryContainer.withAlpha(90),
           // backgroundBlendMode: .screen,
-          borderRadius: .circular(15),
+          borderRadius: .circular(20),
           border: .all(
             width: 2,
             color: Colors.white,
           ),
         ),
-        child: Text(
-          perviousPaths.last,
-          textAlign: .center,
-          maxLines: 1,
-          overflow: .ellipsis,
-          style: TextStyle(
-            fontSize: 12
-          ),
+        child: Column(
+          mainAxisAlignment: .spaceEvenly,
+          children: [
+            Text(
+              perviousPaths.last,
+              textAlign: .center,
+              maxLines: 1,
+              overflow: .ellipsis,
+              style: TextStyle(
+                fontSize: 12
+              ),
+            ),
+            Chip(
+              label: Text("heheheh"),
+              onDeleted: () => showAboutDialog(context: context),
+            ),
+          ],
         )
       ).frosted(
         blur: 2,
-        borderRadius: .circular(15),
+        borderRadius: .circular(20),
       ),
-    );
-  }
-}
-
-class _FileFloatingBtn extends StatelessWidget {
-  const _FileFloatingBtn();
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
-      foregroundColor: Theme.of(context).colorScheme.onTertiaryContainer,
-      onPressed: () {},
-      tooltip: 'New...',
-      child: const Icon(Icons.add),
     );
   }
 }
