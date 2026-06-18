@@ -19,7 +19,7 @@ void showFilesPageNewDialog(String currentDir, BuildContext context, Function on
         children: [
           _Header(),
           SizedBox(height: 15,),
-          _SingleChoice(),
+          _TypeToCreate(),
           SizedBox(height: 10,),
           TextField(
             controller: ctrlr,
@@ -38,7 +38,7 @@ void showFilesPageNewDialog(String currentDir, BuildContext context, Function on
             onPressed: () {
               Navigator.of(context).pop();
               try {
-                switch (_SingleChoiceState.calendarView) {
+                switch (_TypeToCreateState.calendarView) {
                   case .file: File("$currentDir/${ctrlr.text}").createSync(recursive: true);
                   case .folder: Directory("$currentDir/${ctrlr.text}").createSync(recursive: true);
                 }
@@ -84,12 +84,12 @@ class _Header extends StatelessWidget {
 
 enum _CreateNew { file, folder }
 
-class _SingleChoice extends StatefulWidget {
+class _TypeToCreate extends StatefulWidget {
   @override
-  State<_SingleChoice> createState() => _SingleChoiceState();
+  State<_TypeToCreate> createState() => _TypeToCreateState();
 }
 
-class _SingleChoiceState extends State<_SingleChoice> {
+class _TypeToCreateState extends State<_TypeToCreate> {
   static _CreateNew calendarView = .file;
 
   @override

@@ -103,7 +103,7 @@ class _FilesPageState extends State<FilesPage> {
           children: [
             ListView.builder(
               physics: BouncingScrollPhysics(),
-              padding: .only(bottom: 350, top: 50),
+              padding: .only(bottom: 350, top: 65),
               itemCount: currentFiles.length,
               itemBuilder: (context, i) => FileOrFolderCardWidget(
                 filePath: currentFiles[i].path,
@@ -195,8 +195,7 @@ class _CurrentPathHeader extends StatelessWidget {
     return Container(
       margin: .only(top: 5.5),
       child: Container(
-        height: 90,
-        padding: .all(5),
+        padding: .all(15),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.tertiaryContainer.withAlpha(90),
           // backgroundBlendMode: .screen,
@@ -206,23 +205,14 @@ class _CurrentPathHeader extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: .spaceEvenly,
-          children: [
-            Text(
-              perviousPaths.last,
-              textAlign: .center,
-              maxLines: 1,
-              overflow: .ellipsis,
-              style: TextStyle(
-                fontSize: 12
-              ),
-            ),
-            Chip(
-              label: Text("heheheh"),
-              onDeleted: () => showAboutDialog(context: context),
-            ),
-          ],
+        child: Text(
+          perviousPaths.last,
+          textAlign: .center,
+          maxLines: 2,
+          overflow: .ellipsis,
+          style: TextStyle(
+            fontSize: 12
+          ),
         )
       ).frosted(
         blur: 2,

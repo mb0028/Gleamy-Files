@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gleamy_files/Structs/mb_file_sys_entity.dart';
+import 'package:gleamy_files/ui/Popups/files_more_action.dart';
 
 class FileDetailsPanel extends StatelessWidget {
   const FileDetailsPanel({super.key, required this.mbFSE});
@@ -11,20 +12,11 @@ class FileDetailsPanel extends StatelessWidget {
       // bool isFile = fileFolder.isFile;
       String size = ""; String modified = ""; String accessed = "";
 
-      // if (isFile && fileFolder.path.isNotEmpty) {
-        var m = mbFSE.dateModified;
-        var a = mbFSE.dateAccessed;
-        size = "Size: ${mbFSE.sizeBytes} Bytes";
-        modified = "Modified: ${m.day}/${m.month}/${m.year}";
-        accessed = "Accessed: ${a.day}/${a.month}/${a.year}";
-      // }
-      // else if (!isFile && fileFolder.path.isNotEmpty) {
-      //   var m = fileFolder.dateModified;
-      //   var a = fileFolder.dateAccessed;
-      //   size = "Size: ${fileFolder.sizeBytes} Bytes";
-      //   modified = "Modified: ${m.day}/${m.month}/${m.year}";
-      //   accessed = "Accessed: ${a.day}/${a.month}/${a.year}";
-      // }
+      var m = mbFSE.dateModified;
+      var a = mbFSE.dateAccessed;
+      size = "Size: ${mbFSE.sizeBytes} Bytes";
+      modified = "Modified: ${m.day}/${m.month}/${m.year}";
+      accessed = "Accessed: ${a.day}/${a.month}/${a.year}";
 
       return SelectionArea(
         child: Container(
@@ -34,7 +26,7 @@ class FileDetailsPanel extends StatelessWidget {
             borderRadius: .only(topRight: .circular(25), bottomRight: .circular(25)),
             color: Theme.of(context).colorScheme.surfaceContainerLowest
           ),
-          child: Column(
+          child: mbFSE.path.isNotEmpty ? Column(
             crossAxisAlignment: .start,
             spacing: 8,
             children: [
@@ -73,8 +65,14 @@ class FileDetailsPanel extends StatelessWidget {
                 ],
               ),
               Text(mbFSE.path),
+              ElevatedButton(
+                child: Text("More Actions"),
+                onPressed: () => showFileOrFolderMoreActionDialog(
+                  mbFSE.path, context, () {},
+                ),
+              ),
             ],
-          ),
+          ) : null,
         ),
       );
     }

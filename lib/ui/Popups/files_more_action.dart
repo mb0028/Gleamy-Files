@@ -3,13 +3,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gleamy_files/ui/Popups/toast.dart';
-import 'package:gleamy_files/ui/Widgets/outl_btn_with_padding.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:gleamy_files/ui/Popups/file_page_helper_dialogs.dart';
 import 'package:gleamy_files/main.dart';
+import 'package:path/path.dart' as Path;
 
 void showFileOrFolderMoreActionDialog(String path, BuildContext context, Function onDialogPop) {
-  showDialog(context: context, builder:(context) {
+  showDialog(context: context, builder: (context) {
     if (FileSystemEntity.isDirectorySync(path)) {
       return _ShowFolderDialog(path, context, onDialogPop);
     } else {
@@ -27,55 +27,62 @@ Dialog _ShowFileDialog(String path, BuildContext context, Function onDialogPop) 
       child: ListView(
         physics: BouncingScrollPhysics(),
         children: [
-          OutlineBtnWithPadding(
-            text: "Open",
-            onClick: () async {
-              Navigator.of(context).pop();
-              await OpenFilex.open(path);
-            },
-          ),
-          OutlineBtnWithPadding(
-            text: "Rename",
-            onClick: () async {
-              Navigator.of(context).pop();
-              await renameFileDialog(context, path);
-              onDialogPop();
-            }
-          ),
-          OutlineBtnWithPadding(
-            text: "Delete",
-            onClick: () async {
-              Navigator.of(context).pop();
-              await deleteFileDialoge(context, path);
-              onDialogPop();
-            },
-          ),
-          OutlineBtnWithPadding(
-            text: _addToFavoritsText(path),
-            onClick: () => _addToFavorits(path, context, onDialogPop),
-          ),
-          Row(
-            spacing: 6,
+          Column(
+            spacing: 8,
+            crossAxisAlignment: .stretch,
             children: [
-              Expanded(
-                child: OutlineBtnWithPadding(
-                  text: "Copy",
-                  onClick: () async {
-                    Navigator.of(context).pop();
-                    await copyOrMoveDialoge(context, path, false);
-                    onDialogPop();
-                  },
-                ),
+              Text(Path.basename(path), textAlign: .center,),
+              OutlinedButton(
+                child: Text("Open"),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await OpenFilex.open(path);
+                },
               ),
-              Expanded(
-                child: OutlineBtnWithPadding(
-                  text: "Move",
-                  onClick: () async {
-                    Navigator.of(context).pop();
-                    await copyOrMoveDialoge(context, path, true);
-                    onDialogPop();
-                  },
-                ),
+              OutlinedButton(
+                child: Text("Rename"),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await renameFileDialog(context, path);
+                  onDialogPop();
+                }
+              ),
+              OutlinedButton(
+                child: Text("Delete"),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await deleteFileDialoge(context, path);
+                  onDialogPop();
+                },
+              ),
+              OutlinedButton(
+                child: Text(_addToFavoritsText(path)),
+                onPressed: () => _addToFavorits(path, context, onDialogPop),
+              ),
+              Row(
+                spacing: 6,
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      child: Text("Copy"),
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        await copyOrMoveDialoge(context, path, false);
+                        onDialogPop();
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: OutlinedButton(
+                      child: Text("Move"),
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        await copyOrMoveDialoge(context, path, true);
+                        onDialogPop();
+                      },
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -95,52 +102,33 @@ Dialog _ShowFolderDialog(String path, BuildContext context, Function onDialogPop
       child: ListView(
         physics: BouncingScrollPhysics(),
         children: [
-          // OutlineBtnWithPadding(
-          //   text: "Rename",
-          //   onClick: () async {
-          //     Navigator.of(context).pop();
-          //     await renameFileDialog(context, path);
-          //     onDialogPop();
-          //   }
-          // ), TODO
-          OutlineBtnWithPadding(
-            text: "Delete",
-            onClick: () async {
-              Navigator.of(context).pop();
-              await deleteFileDialoge(context, path, isFolder: true);
-              onDialogPop();
-            },
+          Column(
+            spacing: 8,
+            crossAxisAlignment: .stretch,
+            children: [
+              Text(Path.basename(path), textAlign: .center,),
+              OutlinedButton(
+                child: Text("Rename"),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await renameFileDialog(context, path, isFolder: true);
+                  onDialogPop();
+                }
+              ),
+              OutlinedButton(
+                child: Text("Delete"),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await deleteFileDialoge(context, path, isFolder: true);
+                  onDialogPop();
+                },
+              ),
+              OutlinedButton(
+                child: Text(_addToFavoritsText(path)),
+                onPressed: () => _addToFavorits(path, context, onDialogPop),
+              ),
+            ],
           ),
-          OutlineBtnWithPadding(
-            text: _addToFavoritsText(path),
-            onClick: () => _addToFavorits(path, context, onDialogPop),
-          ),
-          // Row(
-          //   spacing: 6,
-          //   children: [
-          //     Expanded(
-          //       child: OutlineBtnWithPadding(
-          //         text: "Copy",
-          //         onClick: () async {
-          //           Navigator.of(context).pop();
-          //           await copyOrMoveDialoge(context, path, false);
-          //           onDialogPop();
-          //         },
-          //       ),
-          //     ),
-          //     Expanded(
-          //       child: OutlineBtnWithPadding(
-          //         text: "Move",
-          //         onClick: () async {
-          //           Navigator.of(context).pop();
-          //           await copyOrMoveDialoge(context, path, true);
-          //           onDialogPop();
-          //         },
-          //       ),
-          //     ),
-          //   ],
-          // ), TODO
-          
         ],
       ),
     ),

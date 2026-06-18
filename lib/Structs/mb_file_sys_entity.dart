@@ -34,12 +34,16 @@ class MBFileSysEntity {
       case ".html" || ".htm" || ".mhtml" || ".url": return Icons.language_rounded;
       case ".css": return Icons.palette_outlined;
       case ".lnk": return Icons.link;
+      case ".apk" || ".aab" || ".xapk" || ".apks" || ".apk+": return Icons.apps_rounded;
       case ".exe": return Icons.window_rounded;
-      case ".dll": return Icons.dynamic_form;
+      case ".dll" || ".jar" || ".obb" || ".so": return Icons.dynamic_form;
+      case ".reg": return Icons.app_registration_outlined;
+      case ".bat": return Icons.terminal_rounded;
       case ".pdf": return Icons.menu_book_rounded;
       case ".docx" || ".pptx" || ".xls" || ".sdocx": return Icons.sticky_note_2_outlined;
       case ".xml" || ".xaml" || ".csproj" || ".slnx": return Icons.extension_rounded;
       case ".ust" || ".ustx" || ".vsqx" || ".svp" || ".midi" || ".mid" || ".flp" || ".flm": return Icons.piano_rounded;
+      case ".ttf" || ".otf": return Icons.font_download_outlined;
       case "": return Icons.folder_outlined;
     }
     return Icons.insert_drive_file_outlined;

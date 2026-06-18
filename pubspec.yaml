@@ -11,10 +11,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # system_theme: ^3.3.0
+  system_theme: ^3.3.0
 
   open_filex: ^4.7.0
   path: ^1.9.1
+  storage_space: ^1.2.0
   
   flutter_styled_toast: ^2.3.0
   blur: ^4.0.2

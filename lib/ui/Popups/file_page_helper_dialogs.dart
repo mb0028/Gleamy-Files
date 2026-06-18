@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gleamy_files/ui/Popups/toast.dart';
 import 'package:path/path.dart' as Path;
 
-Future renameFileDialog(BuildContext context, String path) async {
-  var file = File(path);
+Future renameFileDialog(BuildContext context, String path, { bool isFolder = false }) async {
+  var file = isFolder ? Directory(path) : File(path);
   var ctrlr = TextEditingController();
   ctrlr.text = Path.basename(file.path);
   await showDialog(context: context, builder: (context) => Dialog (

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:gleamy_files/Structs/mb_file_sys_entity.dart';
 import 'package:gleamy_files/main.dart';
 import 'package:gleamy_files/ui/Popups/files_more_action.dart';
 import 'package:gleamy_files/ui/Widgets/file_or_folder_card.dart';
@@ -7,6 +8,7 @@ import 'package:gleamy_files/ui/Widgets/navigation_bars.dart';
 import 'package:gleamy_files/ui/Widgets/scaffold_padding.dart';
 import 'package:gleamy_files/ui/files_page.dart';
 import 'package:open_filex/open_filex.dart';
+import 'package:storage_space/storage_space.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -67,9 +69,9 @@ class _HomeMainDirs extends StatelessWidget {
       children: [
         Column(
           children: [
-            _Dir(path: Platform.isAndroid ? "/sdcard" : "C:/"),
-            _Dir(path: Platform.isAndroid ? " " : "D:/"),
-            _Dir(path: Platform.isAndroid ? "/sdcard/Download" : "E:/"),
+            Platform.isAndroid ? _DirSpace(path:  "/sdcard") : _Dir(path: "C:/"),
+            _Dir(path: Platform.isAndroid ? "/sdcard/Download" : "D:/"),
+            _Dir(path: Platform.isAndroid ? " " : "E:/"),
           ],
         ),
         Divider(height: 10),
@@ -133,6 +135,57 @@ class _Dir extends StatelessWidget {
           },
         ),
         onFocusChange: (isFocused, path) {},
+      ),
+    );
+  }
+}
+
+class _DirSpace extends StatefulWidget {
+  final String path;
+  const _DirSpace({required this.path});
+
+  @override
+  State<_DirSpace> createState() => _DirSpaceState();
+}
+
+class _DirSpaceState extends State<_DirSpace> {
+  StorageSpace? _space;
+
+  void initStorageSpace() async {
+    StorageSpace storageSpace = await getStorageSpace(
+      lowOnSpaceThreshold: 2 * 1024 * 1024 * 1024, // 2GB
+      fractionDigits: 1,
+    );
+    setState(() {
+      _space = storageSpace;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initStorageSpace();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+      child: Stack(
+        children: [
+          FileOrFolderCardWidget(
+            filePath: widget.path,
+            onClick: (path) => MBFileSysEntity(path).isFile
+              ? OpenFilex.open(path)
+              : _openDir(path, context),
+              onLongPress: (path) => showFileOrFolderMoreActionDialog(path, context, () { },
+            ),
+            onFocusChange: (isFocused, path) {},
+          ),
+          LinearProgressIndicator(
+            value:  _space?.usageValue,
+          ),
+        ], 
       ),
     );
   }
