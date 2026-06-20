@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gleamy_files/Scripts/settings.dart';
 import 'package:gleamy_files/ui/home_page.dart';
-import 'package:system_theme/system_theme.dart';
 
 const Color gleamyAppsDefaultSeedColor = Color.fromARGB(255, 255, 197, 82);
 Settings appSettings = Settings();
@@ -24,8 +23,8 @@ class MyApp extends StatelessWidget {
         colorScheme: .fromSeed(
           seedColor: switch (appSettings.appTheme) {
             0 => gleamyAppsDefaultSeedColor,
-            1 => SystemTheme.accentColor.darker,
-            2 => SystemTheme.accentColor.accent,
+            1 => gleamyAppsDefaultSeedColor, //TODO
+            2 => gleamyAppsDefaultSeedColor, //TODO
             int() => throw UnimplementedError(),
           }, // SystemTheme.accentColor.accent,
           dynamicSchemeVariant: .rainbow,

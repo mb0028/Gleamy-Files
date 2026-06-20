@@ -23,7 +23,7 @@ Dialog _ShowFileDialog(String path, BuildContext context, Function onDialogPop) 
     child: Container(
       width: 500,
       padding: .all(15),
-      height: 260,
+      height: 400,
       child: ListView(
         physics: BouncingScrollPhysics(),
         children: [
@@ -98,7 +98,7 @@ Dialog _ShowFolderDialog(String path, BuildContext context, Function onDialogPop
     child: Container(
       width: 500,
       padding: .all(15),
-      height: 260,
+      height: 400,
       child: ListView(
         physics: BouncingScrollPhysics(),
         children: [

@@ -15,14 +15,14 @@ class MBFileSysEntity {
   /// extns: Extension
   String get extns => isFile ? Path.extension(path) : "";
   DateTime get dateModified => _stat.modified;
-  DateTime get dateAccessed=> _stat.accessed;
+  DateTime get dateAccessed => _stat.accessed;
   int get sizeBytes => _stat.size;
 
   IconData get icon {
     switch (extns) {
       case ".png" || ".jpg" || ".jpeg" || ".webp": return Icons.photo_outlined;
       case ".mp4" || ".mkv": return Icons.video_file_outlined;
-      case ".mp3" || ".m4a" || ".flac" || ".wav" || ".ogg" || ".aac": return Icons.music_note_outlined;
+      case ".mp3" || ".m4a" || ".flac" || ".wav" || ".ogg" || ".aac" || ".m3u": return Icons.music_note_outlined;
       case ".gif": return Icons.gif_outlined;
       case ".txt": return Icons.text_snippet_outlined;
       case ".lrc" || ".srt": return Icons.subtitles_outlined;

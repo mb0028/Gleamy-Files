@@ -16,7 +16,8 @@ class Settings {
   static const String _favoritePathsID = "[FAVORITE]";
   static const String _favoriteSortingID = "[FAVORITE_SORTING]";
   static const String _appThemeID = "[APP_THEME]";
-  static String savePath = Platform.isAndroid ? "/sdcard/Android/data/mb28.GleamyFiles/files/Settings.txt"
+  static String savePath = Platform.isAndroid
+    ? "/sdcard/Documents/.GleamyFilesSettings.txt" // TODO: this is temporary and needs to change
     : "E:/_ST/Settings.txt"; // TODO: this is temporary and needs to change
 
   Future loadSettings() async {

@@ -91,11 +91,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_web_plugins:
-    dependency: transitive
-    description: flutter
-    source: sdk
-    version: "0.0.0"
   leak_tracker:
     dependency: transitive
     description:
@@ -189,14 +184,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.12.1"
-  storage_space:
-    dependency: "direct main"
-    description:
-      name: storage_space
-      sha256: "8a3fbc61c20ce3b926b663b4ae77064e2bc5351a49756a41fa415e302f4063cd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.0"
   stream_channel:
     dependency: transitive
     description:
@@ -213,22 +200,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
-  system_theme:
-    dependency: "direct main"
-    description:
-      name: system_theme
-      sha256: "03525aaeead2bfc0d81b84ceee1dbafb90cbf9886efd861489b7c20fdf466479"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.3.0"
-  system_theme_web:
-    dependency: transitive
-    description:
-      name: system_theme_web
-      sha256: ae9fce643da035c9af16cc79e0bf598fa4751da91dcfe240da309ef5d78eec5f
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.5"
   term_glyph:
     dependency: transitive
     description:
@@ -261,14 +232,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "15.2.0"
-  web:
-    dependency: transitive
-    description:
-      name: web
-      sha256: "868d88a33d8a87b18ffc05f9f030ba328ffefba92d6c127917a2ba740f9cfe4a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
 sdks:
   dart: ">=3.12.0 <4.0.0"
-  flutter: ">=3.44.0"
+  flutter: ">=3.18.0-18.0.pre.54"

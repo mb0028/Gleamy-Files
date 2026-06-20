@@ -8,7 +8,6 @@ import 'package:gleamy_files/ui/Widgets/navigation_bars.dart';
 import 'package:gleamy_files/ui/Widgets/scaffold_padding.dart';
 import 'package:gleamy_files/ui/files_page.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:storage_space/storage_space.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -149,16 +148,16 @@ class _DirSpace extends StatefulWidget {
 }
 
 class _DirSpaceState extends State<_DirSpace> {
-  StorageSpace? _space;
+  //StorageSpace? _space;
 
   void initStorageSpace() async {
-    StorageSpace storageSpace = await getStorageSpace(
-      lowOnSpaceThreshold: 2 * 1024 * 1024 * 1024, // 2GB
-      fractionDigits: 1,
-    );
-    setState(() {
-      _space = storageSpace;
-    });
+    // StorageSpace storageSpace = await getStorageSpace(
+    //   lowOnSpaceThreshold: 2 * 1024 * 1024 * 1024, // 2GB
+    //   fractionDigits: 1,
+    // );
+    // setState(() {
+    //   _space = storageSpace;
+    // });
   }
 
   @override
@@ -182,9 +181,9 @@ class _DirSpaceState extends State<_DirSpace> {
             ),
             onFocusChange: (isFocused, path) {},
           ),
-          LinearProgressIndicator(
-            value:  _space?.usageValue,
-          ),
+          // LinearProgressIndicator(
+          //   //value:  _space?.usageValue,
+          // ),
         ], 
       ),
     );
