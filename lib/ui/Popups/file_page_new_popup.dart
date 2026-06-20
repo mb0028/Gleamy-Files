@@ -33,6 +33,7 @@ void showFilesPageNewDialog(String currentDir, BuildContext context, Function on
           ),
           SizedBox(height: 10,),
           FilledButton.icon(
+            autofocus: true,
             label: Text("Create"),
             icon: Icon(Icons.add),
             onPressed: () {

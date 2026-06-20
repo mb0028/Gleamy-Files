@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:gleamy_files/Structs/mb_file_sys_entity.dart';
 import 'package:gleamy_files/ui/Popups/file_page_new_popup.dart';
 import 'package:gleamy_files/ui/Popups/files_more_action.dart';
-import 'package:gleamy_files/ui/Widgets/file_details_panel.dart';
 import 'package:gleamy_files/ui/Widgets/file_or_folder_card.dart';
 import 'package:gleamy_files/ui/Widgets/scaffold_padding.dart';
-import 'package:gleamy_files/ui/Popups/settings_popup.dart';
 import 'package:open_filex/open_filex.dart';
 
 class FilesPage extends StatefulWidget {
@@ -82,69 +80,42 @@ class _FilesPageState extends State<FilesPage> {
         }
       },
       child: Scaffold(
-        appBar: filesPageAppBar(context),
-        body: Row(
-          mainAxisSize: .min,
-          children: [
-            FileDetailsPanel(mbFSE: MBFileSysEntity(selectedPath)),
-            filesView(),
-          ],
-        ),
-        floatingActionButton: _fileFloatingBtn(context, perviousPaths.last),
+        body: filesView(),
       ),
     );
   }
 
   Widget filesView() {
-    return Expanded(
-      child: ScaffoldPadding(
-        child: Stack(
-          alignment: AlignmentGeometry.topCenter,
-          children: [
-            ListView.builder(
-              physics: BouncingScrollPhysics(),
-              padding: .only(bottom: 350, top: 65),
-              itemCount: currentFiles.length,
-              itemBuilder: (context, i) => FileOrFolderCardWidget(
-                filePath: currentFiles[i].path,
-                onClick: (s) => openFileOrFolder(s),
-                onLongPress: (s) => showFileOrFolderMoreActionDialog(s, context, () {
-                  updatePaths(perviousPaths.last);
-                }),
-                onFocusChange: _onFileFocusChanges,
-              ),
+    return ScaffoldPadding(
+      child: Stack(
+        alignment: AlignmentGeometry.topCenter,
+        children: [
+          GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 4,
+              mainAxisSpacing: 2,
+              crossAxisSpacing: 5
             ),
-            _CurrentPathHeader(perviousPaths: perviousPaths),
-          ],
-        ),
+            physics: BouncingScrollPhysics(),
+            padding: .only(bottom: 350, top: 65),
+            itemCount: currentFiles.length,
+            itemBuilder: (context, i) => FileOrFolderCardWidget(
+              filePath: currentFiles[i].path,
+              onClick: (s) => openFileOrFolder(s),
+              onLongPress: (s) => showFileOrFolderMoreActionDialog(s, context, () {
+                updatePaths(perviousPaths.last);
+              }),
+              onFocusChange: _onFileFocusChanges,
+            ),
+          ),
+          _CurrentPathHeader(
+            perviousPaths: perviousPaths,
+            backButton: backButton(),
+            createButton: _fileFloatingBtn(context, perviousPaths.last),
+          ),
+        ],
       ),
-    );
-  }
-
-  AppBar filesPageAppBar(BuildContext context) {
-    return AppBar(
-      surfaceTintColor: Theme.of(context).colorScheme.tertiaryContainer,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      title: Text(
-        widget.title,
-        style: TextStyle(
-          fontWeight: .bold,
-        ),
-      ),
-      centerTitle: true,
-      leading: backButton(),
-      actionsPadding: EdgeInsets.only(right: 8),
-      actions: [
-        SettingsPopupButton()
-      ],
-    );
-  }
-
-  IconButton? backButton() {
-    return IconButton(
-      tooltip: "Back",
-      onPressed: () => backAction(),
-      icon: Icon(Icons.arrow_back),
     );
   }
 
@@ -165,10 +136,19 @@ class _FilesPageState extends State<FilesPage> {
     }
   }
 
-  Widget _fileFloatingBtn(BuildContext context, String lastPath) {
-    return FloatingActionButton(
-      backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
-      foregroundColor: Theme.of(context).colorScheme.onTertiaryContainer,
+  IconButton backButton() {
+    return IconButton.filledTonal(
+      tooltip: "Back",
+      onPressed: () => backAction(),
+      autofocus: true,
+      icon: Icon(Icons.arrow_back),
+    );
+  }
+
+  IconButton _fileFloatingBtn(BuildContext context, String lastPath) {
+    return IconButton.filledTonal(
+      icon: Icon(Icons.create_new_folder_outlined),
+      tooltip: 'New...',
       onPressed: () { 
         showFilesPageNewDialog(lastPath, context, () {
           setState(() {
@@ -176,16 +156,16 @@ class _FilesPageState extends State<FilesPage> {
           });
         },);
       },
-      tooltip: 'New...',
-      child: const Icon(Icons.add),
     );
   }
 
 }
 
 class _CurrentPathHeader extends StatelessWidget {
+  final IconButton backButton;
+  final IconButton createButton; 
   const _CurrentPathHeader({
-    required this.perviousPaths,
+    required this.perviousPaths, required this.backButton, required this.createButton,
   });
 
   final List<String> perviousPaths;
@@ -194,29 +174,37 @@ class _CurrentPathHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: .only(top: 5.5),
-      child: Container(
-        padding: .all(15),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.tertiaryContainer.withAlpha(90),
-          // backgroundBlendMode: .screen,
-          borderRadius: .circular(20),
-          border: .all(
-            width: 2,
-            color: Colors.white,
+      child: Row(
+        mainAxisAlignment: .center,
+        spacing: 15,
+        children: [
+          backButton,
+          Container(
+            padding: .all(15),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.tertiaryContainer.withAlpha(90),
+              // backgroundBlendMode: .screen,
+              borderRadius: .circular(20),
+              border: .all(
+                width: 2,
+                color: Colors.white,
+              ),
+            ),
+            child: Text(
+              perviousPaths.last,
+              textAlign: .center,
+              maxLines: 2,
+              overflow: .ellipsis,
+              style: TextStyle(
+                fontSize: 12
+              ),
+            )
+          ).frosted(
+            blur: 2,
+            borderRadius: .circular(20),
           ),
-        ),
-        child: Text(
-          perviousPaths.last,
-          textAlign: .center,
-          maxLines: 2,
-          overflow: .ellipsis,
-          style: TextStyle(
-            fontSize: 12
-          ),
-        )
-      ).frosted(
-        blur: 2,
-        borderRadius: .circular(20),
+          createButton,
+        ],
       ),
     );
   }

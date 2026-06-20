@@ -85,33 +85,52 @@ class _FileFolderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: .symmetric(vertical: 5),
       padding: .symmetric(vertical: 1),
-      child: Focus(
-        onFocusChange: (value) => onFucusChange(value, filePath),
-        child: ListTile(
-          tileColor: color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadiusGeometry.circular(15)
-          ),
-          onTap: () => onClick(filePath),
-          onLongPress: () => onLongPress(filePath),
-          leading: Icon(
-            icon,
-            size: 36,
-          ),
-          title: Text(
-            displayName,
-            style: TextStyle(
+      child: Row(
+        spacing: 2,
+        children: [
+          Expanded(
+            flex: 7,
+            child: ListTile(
+              tileColor: color,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadiusGeometry.circular(15)
+              ),
+              onTap: () => onClick(filePath),
+              onLongPress: () => onLongPress(filePath),
+              leading: Icon(
+                icon,
+                size: 36,
+              ),
+              title: Text(
+                displayName,
+                maxLines: 1,
+                style: TextStyle(
+                ),
+              ),
+              subtitle: Text(
+                subtitle,
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: 12.5,
+                ),
+              ),
             ),
           ),
-          subtitle: Text(
-            subtitle,
-            style: TextStyle(
-              fontSize: 12.5,
-            ),
-          ),
-        ),
+          Expanded(
+            child: Container(
+              height: 45,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.tertiaryContainer,
+                borderRadius: .circular(15)
+              ),
+              child: IconButton(
+                icon: Icon(Icons.more_horiz_rounded),
+                onPressed: () => onLongPress(filePath),
+              ),
+            )
+          )
+        ],
       ),
     );
   }
